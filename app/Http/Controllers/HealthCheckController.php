@@ -25,12 +25,31 @@ class HealthCheckController extends Controller
         ];
 
         $check_results = [];
+        $healthy_services = 0;
+        $overall_status = null;
 
         foreach ($services as $service) {
             $check_results[] = $this->check($service);
         }
 
-        return response()->json($check_results);
+        foreach ($check_results as $result) {
+            if ($result['status'] === "up") {
+                $healthy_services++;
+            }
+        }
+
+        if ($healthy_services === 3) {
+            $overall_status = "healthy";
+        } else if ($healthy_services > 0) {
+            $overall_status = "degraded";
+        } else {
+            $overall_status = "down";
+        }
+
+        return response()->json([
+            "overall_status" => $overall_status,
+            "services" => $check_results
+        ]);
     }
 
     private function check($service)
