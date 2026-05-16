@@ -24,7 +24,7 @@ Each health check returns:
       "service": "Google",
       "status": "up",
       "http_status": 200,
-      "response_time": 1315.01
+        "response_time": 1315.01
     },
     {
       "service": "Fake",
